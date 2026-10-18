@@ -1,0 +1,46 @@
+{
+  "strategy_id": "pharos-vault-rebalance-guard",
+  "name": "Pharos Vault Rebalance Guard",
+  "description": "Evaluates network gas, vault liquidity, and guardian native balance before approving execution",
+  "operator": "ALL",
+  "conditions": [
+    {
+      "id": "network_gas_price",
+      "name": "Network Gas Price Guard",
+      "type": "gas_price",
+      "operator": "<=",
+      "threshold": 3.0,
+      "unit": "Gwei",
+      "description": "Ensure current network gas price is at or below 3.0 Gwei"
+    },
+    {
+      "id": "vault_usdc_liquidity",
+      "name": "Vault Minimum Liquidity",
+      "type": "token_balance",
+      "contract_address": "0xE0BE08c77f415F577A1B3A9aD7a1Df1479564ec8",
+      "holder_address": "0x000000000000000000000000000000000000dEaD",
+      "decimals": 6,
+      "operator": ">=",
+      "threshold": 50.0,
+      "unit": "USDC",
+      "description": "Target vault or holder address must hold at least 50.0 USDC"
+    },
+    {
+      "id": "guardian_native_balance",
+      "name": "Guardian Native Gas Reserve",
+      "type": "native_balance",
+      "address": "0x0000000000000000000000000000000000000000",
+      "operator": ">=",
+      "threshold": 0.0,
+      "unit": "PHRS",
+      "description": "Guardian or initiator address must maintain non-negative native gas reserve"
+    }
+  ],
+  "action": {
+    "action_id": "vault_rebalance_trigger",
+    "description": "Simulated vault rebalance call",
+    "target_contract": "0xE0BE08c77f415F577A1B3A9aD7a1Df1479564ec8",
+    "simulated_gas_limit": 250000,
+    "simulation_only": true
+  }
+}
