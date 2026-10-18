@@ -102,6 +102,18 @@ def main():
         help="Override vault liquidity floor threshold (USDC)",
     )
     eval_parser.add_argument(
+        "--min-gas-reserve",
+        type=float,
+        default=None,
+        help="Override guardian native gas reserve floor threshold (PHRS/PROS)",
+    )
+    eval_parser.add_argument(
+        "--guardian-address",
+        type=str,
+        default=None,
+        help="Override guardian wallet address for native gas reserve check",
+    )
+    eval_parser.add_argument(
         "--json",
         action="store_true",
         help="Output raw JSON DecisionTrace instead of formatted table",
@@ -228,6 +240,17 @@ def main():
         for c in rules_data.get("conditions", []):
             if c.get("type") in ("token_balance", "erc20_balance"):
                 c["threshold"] = args.min_liquidity
+
+    if getattr(args, "min_gas_reserve", None) is not None:
+        for c in rules_data.get("conditions", []):
+            if c.get("type") in ("native_balance", "balance"):
+                c["threshold"] = args.min_gas_reserve
+
+    if getattr(args, "guardian_address", None):
+        for c in rules_data.get("conditions", []):
+            if c.get("type") in ("native_balance", "balance"):
+                c["address"] = args.guardian_address
+                c["holder_address"] = args.guardian_address
 
     if getattr(args, "operator", None):
         rules_data["operator"] = args.operator

@@ -29,11 +29,11 @@
       "id": "guardian_native_balance",
       "name": "Guardian Native Gas Reserve",
       "type": "native_balance",
-      "address": "0x0000000000000000000000000000000000000000",
+      "address": "0x000000000000000000000000000000000000dEaD",
       "operator": ">=",
-      "threshold": 0.0,
+      "threshold": 0.1,
       "unit": "PHRS",
-      "description": "Guardian or initiator address must maintain non-negative native gas reserve"
+      "description": "Operational guardian address must maintain a positive gas reserve (>= 0.10 PHRS) to fund execution"
     }
   ],
   "action": {
